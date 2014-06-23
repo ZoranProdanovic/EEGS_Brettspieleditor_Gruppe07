@@ -6,6 +6,9 @@
 
 package view;
 
+import events.ActionJListHome;
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author Adrian
@@ -31,10 +34,12 @@ public class Properties extends javax.swing.JFrame {
     jLabel1 = new javax.swing.JLabel();
     jLabel2 = new javax.swing.JLabel();
     jScrollPane1 = new javax.swing.JScrollPane();
-    jList1 = new javax.swing.JList();
-    jButton1 = new javax.swing.JButton();
+    jListProperties = new javax.swing.JList();
+    jButtonBack = new javax.swing.JButton();
+    jSeparator1 = new javax.swing.JSeparator();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    setResizable(false);
 
     jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
     jLabel1.setText("BG Mania");
@@ -42,33 +47,47 @@ public class Properties extends javax.swing.JFrame {
     jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/tu_graz_icon.png"))); // NOI18N
     jLabel2.setToolTipText("");
 
-    jList1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-    jList1.setModel(new javax.swing.AbstractListModel() {
+    jListProperties.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+    jListProperties.setModel(new javax.swing.AbstractListModel() {
       String[] strings = { "Add Game", "Credits" };
       public int getSize() { return strings.length; }
       public Object getElementAt(int i) { return strings[i]; }
     });
-    jScrollPane1.setViewportView(jList1);
+    jScrollPane1.setViewportView(jListProperties);
+    jListProperties.addMouseListener(new events.ActionJListProperties(jListProperties, this, new JFileChooser()));
 
-    jButton1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-    jButton1.setText("Back");
+    jButtonBack.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+    jButtonBack.setText("Back");
+    jButtonBack.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonBackActionPerformed(evt);
+      }
+    });
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(layout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addGroup(layout.createSequentialGroup()
+            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+              .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2))
+              .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1)
+                .addContainerGap())))
+          .addGroup(layout.createSequentialGroup()
+            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-          .addGroup(layout.createSequentialGroup()
-            .addComponent(jLabel1)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jLabel2))
-          .addGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-              .addComponent(jScrollPane1))
-            .addContainerGap())))
+        .addComponent(jButtonBack, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap())
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -78,14 +97,22 @@ public class Properties extends javax.swing.JFrame {
           .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addComponent(jButtonBack, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
     );
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
+        this.setVisible(false);
+        Home home_frame = new Home();
+        home_frame.setBounds(this.getBounds());
+        home_frame.setVisible(true);
+    }//GEN-LAST:event_jButtonBackActionPerformed
 
   /**
    * @param args the command line arguments
@@ -123,10 +150,11 @@ public class Properties extends javax.swing.JFrame {
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JButton jButton1;
+  private javax.swing.JButton jButtonBack;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel2;
-  private javax.swing.JList jList1;
+  private javax.swing.JList jListProperties;
   private javax.swing.JScrollPane jScrollPane1;
+  private javax.swing.JSeparator jSeparator1;
   // End of variables declaration//GEN-END:variables
 }
