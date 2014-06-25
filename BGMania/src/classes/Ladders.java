@@ -12,8 +12,8 @@ package classes;
  */
 public class Ladders extends SpecialField {
 
-    public Ladders(Cell activation_position, Cell resonse_position) {
-        super(activation_position, resonse_position);
+    public Ladders(Cell activation_position, Cell resonse_position, int distance) {
+        super(activation_position, resonse_position, distance);
     }
     
 }

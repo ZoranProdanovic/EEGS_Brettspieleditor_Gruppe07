@@ -29,8 +29,16 @@ public class Game {
      * @return the current_player
      */
     public int getCurrentPlayerIndex() {
-        return this.current_player;
+        return this.getCurrent_player();
     }
+    
+    public Player getCurrentPlayerObject() {
+      return player_list.get(current_player);
+    }
+    
+//    public void setCurrentPlayerIndex(int current_player) {
+//        this.current_player;
+//    }
     
     public void addPlayer(Player player) {
       player_list.add(player);
@@ -74,22 +82,28 @@ public class Game {
     
     public void nextPlayer()
     {
-      if(this.current_player == 0)
+      if(this.getCurrent_player() == 0)
       {
-        this.current_player = 1;
+        this.setCurrent_player(1);
       }
       else 
       {
-        this.current_player = 0;
+        this.setCurrent_player(0);
       }
     }
-    
-//    public void run()
-//    {
-//        while(true)
-//        {
-//            
-//        }
-//    }
+
+  /**
+   * @return the current_player
+   */
+  public int getCurrent_player() {
+    return current_player;
+  }
+
+  /**
+   * @param current_player the current_player to set
+   */
+  public void setCurrent_player(int current_player) {
+    this.current_player = current_player;
+  }
     
 }

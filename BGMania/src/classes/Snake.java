@@ -12,8 +12,8 @@ package classes;
  */
 public class Snake extends SpecialField {
 
-    public Snake(Cell activation_position, Cell resonse_position) {
-        super(activation_position, resonse_position);
+    public Snake(Cell activation_position, Cell resonse_position, int distance) {
+        super(activation_position, resonse_position, distance);
     }
     
 }

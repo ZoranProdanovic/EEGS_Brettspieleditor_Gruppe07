@@ -7,7 +7,7 @@
 package classes;
 
 import java.util.List;
-
+import java.lang.Math.*;
 /**
  *
  * @author Adrian
@@ -22,6 +22,44 @@ public class Board {
         this.board = new SpecialField[x][y];
         this.x = x;
         this.y = y;
+    }
+    
+    public Cell getBoardPosition(int board_position) {
+      int x = 0, y = 0;
+      float y_rounded =  ((float) board_position / (float) this.x);
+      y = (board_position / this.x);
+      y_rounded -= y;
+      
+      if(y_rounded == 0.0)
+      {
+        y -= 1;
+      }
+      
+      x = (board_position % this.x);
+      
+      if ( y % 2 == 0 )
+      {
+        // Even - Gerade
+        if( x == 0)
+        {
+          x = this.x - 1;
+        }
+        else
+        {
+          x -= 1;
+        }
+      }
+      else
+      {
+        // Odd - Ungerade
+        if( x != 0)
+        {
+          x = this.x - x;
+        }
+      }
+      
+      Cell cell_position = new Cell(x, y);
+      return cell_position;
     }
 
     /**

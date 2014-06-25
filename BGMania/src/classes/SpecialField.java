@@ -12,12 +12,15 @@ package classes;
  */
 public class SpecialField {
     
-    private Cell activation_position;
-    private Cell new_position;
+    protected Cell activation_position;
+    protected Cell new_position;
+    private int distance;
+//    protected int board_position = 1;
     
-    public SpecialField(Cell activation_position, Cell new_position) {
+    public SpecialField(Cell activation_position, Cell new_position, int distance) {
         this.activation_position = activation_position;
         this.new_position = new_position;
+        this.distance = distance;
     }
 
     /**
@@ -47,6 +50,20 @@ public class SpecialField {
     public void setNew_position(Cell new_position) {
         this.new_position = new_position;
     }
+
+  /**
+   * @return the distance
+   */
+  public int getDistance() {
+    return distance;
+  }
+
+  /**
+   * @param distance the distance to set
+   */
+  public void setDistance(int distance) {
+    this.distance = distance;
+  }
 
     
 }

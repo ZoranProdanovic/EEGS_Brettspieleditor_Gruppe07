@@ -15,7 +15,7 @@ import classes.Color;
 public class Computer extends Player {
 
     public Computer(Color color) {
-        super(color, "Computer");
+        super(color, "COMPUTER");
     }
     
 //    @Override

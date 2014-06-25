@@ -31,7 +31,7 @@ public class TimerListener implements ActionListener{
       int minutes = (seconds % 3600) / 60;
       seconds = seconds % 60;
       
-      label.setText(twoDigitString(hours) + " : " + twoDigitString(minutes) + " : " + twoDigitString(seconds));
+      label.setText(twoDigitString(hours) + ":" + twoDigitString(minutes) + ":" + twoDigitString(seconds));
     }
     private String twoDigitString(int number) {
 

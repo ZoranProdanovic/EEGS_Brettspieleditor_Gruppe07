@@ -33,7 +33,7 @@ public class ActionJListHome extends MouseAdapter{
      ListModel dlm = list.getModel();
      Object item = dlm.getElementAt(index);
      list.ensureIndexIsVisible(index);
-     System.out.println("Double clicked on " + item);
+//     System.out.println("Single click on item " + item);
      home.setVisible(false);
      GameSettings game_settings_frame = new GameSettings(item.toString());
      game_settings_frame.setBounds(home.getBounds());
