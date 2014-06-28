@@ -10,19 +10,25 @@ import classes.Board;
 import classes.Cell;
 import classes.Color;
 import classes.Computer;
-import classes.Ladders;
+import classes.Piece;
 import classes.Player;
 import classes.Player1;
 import classes.PlayerMode;
-import classes.SingleDicingFigure;
-import classes.Snake;
-import classes.SpecialField;
 import events.TimerListener;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -44,32 +50,93 @@ public class Game extends javax.swing.JFrame {
   private Player player2;
   private Timer timer;
   
-  public Game(String game_name, PlayerMode player_mode, Color player1_color, Color player2_color) {
+  public Game(String game_name, PlayerMode player_mode, Color player1_color, Color player2_color) throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
     initComponents();
     setLayout(null);
     
+    String imagepath;
+    String classname;
+    String setround;
+    String settimer;
+    int boardsize_x;
+    int boardsize_y;
+    
     this.game_name = game_name;
     jLabelGameName.setText(game_name);
-    jTextFieldTimer.setText("00:00:00");
-    jTextFieldRoundNumber.setText("0");
+    Board board = null;
+//    jTextFieldTimer.setText("00:00:00");
+//    jTextFieldRoundNumber.setText("0");
     
-    Board board = new Board(6,5);
-    List<SpecialField> special_field_list;
-    special_field_list = new ArrayList<>();
+    try {
+	File fXmlFile = new File("src/snakeandladders/SnakeAndLadders.xml");
+	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	Document doc = dBuilder.parse(fXmlFile);
+	doc.getDocumentElement().normalize();
+	NodeList nList = doc.getElementsByTagName("gamesettings");
+        Node nNode = nList.item(0);
+        Element eElement = (Element) nNode;
+        
+//        System.out.println("name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
+        imagepath = eElement.getElementsByTagName("imagepath").item(0).getTextContent().toString();
+        classname = eElement.getElementsByTagName("classname").item(0).getTextContent().toString();
+        setround = eElement.getElementsByTagName("setround").item(0).getTextContent().toString();
+        settimer = eElement.getElementsByTagName("settimer").item(0).getTextContent().toString();
+        
+        jTextFieldTimer.setText(settimer);
+        jTextFieldRoundNumber.setText(setround);
+        
+        NodeList nList2 = eElement.getElementsByTagName("boardsize");
+        Node nNode2 = nList2.item(0);
+        Element eElement2 = (Element) nNode2;
+        
+        boardsize_x = Integer.valueOf(eElement2.getElementsByTagName("x").item(0).getTextContent());
+        boardsize_y = Integer.valueOf(eElement2.getElementsByTagName("y").item(0).getTextContent());
+        
+        board = new Board(boardsize_x,boardsize_y);
+        
+        List<classes.SpecialField> special_field_list;
+        special_field_list = new ArrayList<>();
 
-    // Ladders
-    special_field_list.add(new Ladders(new Cell(2,0), new Cell(2,3), 19));
-    special_field_list.add(new Ladders(new Cell(4,0), new Cell(4,1), 3));
-    special_field_list.add(new Ladders(new Cell(1,1), new Cell(1,4), 15));
-    special_field_list.add(new Ladders(new Cell(4,3), new Cell(4,4), 9));
-    
-    // Snakes
-    special_field_list.add(new Snake(new Cell(2,4), new Cell(0,0), 26));
-    special_field_list.add(new Snake(new Cell(3,3), new Cell(3,1), 12));
-    special_field_list.add(new Snake(new Cell(5,3), new Cell(5,1), 12));
-    special_field_list.add(new Snake(new Cell(4,2), new Cell(3,0), 13));
-    
-    board.addSpecialFields(special_field_list);
+        Class<?> class_ladder = Class.forName("snakeandladders.Ladder");
+        Class<?> class_snake= Class.forName("snakeandladders.Snake");
+        Constructor<?> cons_class_ladder = class_ladder.getConstructor(Cell.class, Cell.class, int.class);
+        Constructor<?> cons_class_snake = class_snake.getConstructor(Cell.class, Cell.class, int.class);
+        classes.SpecialField ladder;
+        classes.SpecialField snake;
+
+        nList = eElement.getElementsByTagName("snake");
+        for (int temp = 0; temp < nList.getLength(); temp++) 
+        {
+          nNode = nList.item(temp);
+          eElement2 = (Element) nNode;
+          int activationcell_x = Integer.valueOf(eElement2.getElementsByTagName("activationcell").item(0).getTextContent().toString().split("\\\n")[1].trim());
+          int activationcell_y = Integer.valueOf(eElement2.getElementsByTagName("activationcell").item(0).getTextContent().toString().split("\\\n")[2].trim());
+          int setcell_x = Integer.valueOf(eElement2.getElementsByTagName("setcell").item(0).getTextContent().toString().split("\\\n")[1].trim());
+          int setcell_y = Integer.valueOf(eElement2.getElementsByTagName("setcell").item(0).getTextContent().toString().split("\\\n")[2].trim());
+          int distance = Integer.valueOf(eElement2.getElementsByTagName("distance").item(0).getTextContent().toString());
+          snake = (classes.SpecialField) cons_class_snake.newInstance(new Cell(activationcell_x,activationcell_y), new Cell(setcell_x,setcell_y), distance);
+          special_field_list.add(snake);
+        }
+
+        nList = eElement.getElementsByTagName("ladder");
+        for (int temp = 0; temp < nList.getLength(); temp++) 
+        {
+          nNode = nList.item(temp);
+          eElement = (Element) nNode;
+          int activationcell_x = Integer.valueOf(eElement.getElementsByTagName("activationcell").item(0).getTextContent().toString().split("\\\n")[1].trim());
+          int activationcell_y = Integer.valueOf(eElement.getElementsByTagName("activationcell").item(0).getTextContent().toString().split("\\\n")[2].trim());
+          int setcell_x = Integer.valueOf(eElement.getElementsByTagName("setcell").item(0).getTextContent().toString().split("\\\n")[1].trim());
+          int setcell_y = Integer.valueOf(eElement.getElementsByTagName("setcell").item(0).getTextContent().toString().split("\\\n")[2].trim());
+          int distance = Integer.valueOf(eElement.getElementsByTagName("distance").item(0).getTextContent().toString());
+          ladder = (classes.SpecialField) cons_class_ladder.newInstance(new Cell(activationcell_x,activationcell_y), new Cell(setcell_x,setcell_y), distance);
+          special_field_list.add(ladder);
+        }
+        board.addSpecialFields(special_field_list);
+    } 
+    catch (Exception e) {
+	e.printStackTrace();
+    }
     
     // Players
     Player1 player1 = new Player1(player1_color, "PLAYER1");
@@ -84,10 +151,12 @@ public class Game extends javax.swing.JFrame {
     }
     this.player2 = player2;
     
-    // Pieces - Cell start position is on field 1,1
-    SingleDicingFigure player1_figure = new SingleDicingFigure(new Cell(0,0));
-    SingleDicingFigure player2_figure = new SingleDicingFigure(new Cell(0,0));
+    Class<?> c = Class.forName("snakeandladders.SingleDicingFigure");
+    Constructor<?> cons = c.getConstructor(Cell.class);
     
+    Piece player1_figure = (Piece) cons.newInstance(new Cell(0,0));
+    Piece player2_figure = (Piece) cons.newInstance(new Cell(0,0));
+
     player1.setSinglePiece(player1_figure);
     player2.setSinglePiece(player2_figure);
     
@@ -107,6 +176,7 @@ public class Game extends javax.swing.JFrame {
     jLabelRolledPlayer2.setText("Rolled "+player2.getName()+":");
     refreshGameSituation();
   }
+
   
   private void refreshGameSituation() {
     jTextFieldRoundNumber.setText(Integer.toString(game.getRound()));
@@ -452,16 +522,17 @@ public class Game extends javax.swing.JFrame {
         {
           jLabelSecond.setBounds(30+(84 * new_cell.getX()),30+ (330 - (80 * new_cell.getY())), jLabelFirst.getPreferredSize().width, jLabelFirst.getPreferredSize().height);
         }
+        timer.stop();
         JOptionPane.showMessageDialog(this,game.getCurrentPlayerObject().getName()+" WIN", "Congratulations", JOptionPane.INFORMATION_MESSAGE);
         
       }
       else // player not win
       {
-        SpecialField spezial_object = null; 
+        classes.SpecialField spezial_object = null; 
         if(return_statement_move[0] != Integer.valueOf(0)) // TRUE
         {
             new_cell = this.game.getCurrentPlayerObject().getSinglePiece().getPosition();
-            System.out.println(this.game.getCurrentPlayerObject().getSinglePiece().getBoardPosition());
+//            System.out.println(this.game.getCurrentPlayerObject().getSinglePiece().getBoardPosition());
 
             if(this.game.getCurrentPlayerIndex() == 0)
             {
@@ -481,13 +552,13 @@ public class Game extends javax.swing.JFrame {
               jTextFieldRolledPlayer2.setText(return_statement_move[1].toString());
             }
             
-            spezial_object = (SpecialField) return_statement_move[3];
+            spezial_object = (classes.SpecialField) return_statement_move[3];
             if(spezial_object != null) // it exist a spezial object on the current position
             {
               JOptionPane.showMessageDialog(this,game.getCurrentPlayerObject().getName()+" get on a "+spezial_object.getClass().getName().toUpperCase().split("\\.")[1], "Spezial Field", JOptionPane.INFORMATION_MESSAGE);
               return_statement_move = this.game.getPlayerList().get(game.getCurrentPlayerIndex()).getSinglePiece().move(game.getPlayerList().get(game.getCurrentPlayerIndex()).getSinglePiece().getPosition(), this.game);
               this.game = (classes.Game) return_statement_move[2];
-              System.out.println(this.game.getCurrentPlayerObject().getSinglePiece().getBoardPosition());
+//              System.out.println(this.game.getCurrentPlayerObject().getSinglePiece().getBoardPosition());
               new_cell = this.game.getCurrentPlayerObject().getSinglePiece().getPosition();
               if(this.game.getCurrentPlayerIndex() == 0)
               {

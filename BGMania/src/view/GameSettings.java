@@ -8,14 +8,17 @@ package view;
 
 import classes.Color;
 import classes.PlayerMode;
-import java.awt.Rectangle;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
-import javax.swing.ComboBoxModel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.BoundedRangeModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -36,6 +39,8 @@ public class GameSettings extends javax.swing.JFrame {
     public GameSettings(String game_name) {
         initComponents();
         this.game_name = game_name;
+        ChangeListener aChangeListener = new SliderListener();
+        jSliderPlayerMode.addChangeListener(aChangeListener);
     }
 
   /**
@@ -60,7 +65,7 @@ public class GameSettings extends javax.swing.JFrame {
     jComboBoxPlayer1 = new javax.swing.JComboBox();
     jComboBoxPlayer2 = new javax.swing.JComboBox();
     jLabel5 = new javax.swing.JLabel();
-    jLabel6 = new javax.swing.JLabel();
+    jLabelPlayer2 = new javax.swing.JLabel();
     jSeparator1 = new javax.swing.JSeparator();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -155,9 +160,9 @@ public class GameSettings extends javax.swing.JFrame {
     jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
     jLabel5.setText("PLAYER1");
 
-    jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-    jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-    jLabel6.setText("COMPUTER");
+    jLabelPlayer2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    jLabelPlayer2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    jLabelPlayer2.setText("COMPUTER");
 
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
     jPanel2.setLayout(jPanel2Layout);
@@ -171,7 +176,7 @@ public class GameSettings extends javax.swing.JFrame {
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
           .addComponent(jComboBoxPlayer2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+          .addComponent(jLabelPlayer2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addContainerGap())
     );
     jPanel2Layout.setVerticalGroup(
@@ -180,7 +185,7 @@ public class GameSettings extends javax.swing.JFrame {
         .addContainerGap()
         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
           .addComponent(jLabel5)
-          .addComponent(jLabel6))
+          .addComponent(jLabelPlayer2))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(jComboBoxPlayer2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -245,10 +250,43 @@ public class GameSettings extends javax.swing.JFrame {
         home_frame.setVisible(true);
     }//GEN-LAST:event_jButtonBackActionPerformed
 
+    class SliderListener implements ChangeListener {
+      public void stateChanged(ChangeEvent e) {
+      JSlider source = (JSlider)e.getSource();
+        if (!source.getValueIsAdjusting()) 
+        {
+            int fps = (int)source.getValue();
+            if (fps == 0) 
+            {
+                jLabelPlayer2.setText("COMPUTER");
+            } 
+            else 
+            {
+                jLabelPlayer2.setText("PLAYER2");
+            }
+        }
+      }
+    }
+    
     private void jButtonPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPlayActionPerformed
         this.setVisible(false);
         String name = this.game_name;
-        Game game_frame = new Game(name, PlayerMode.fromOrdinal(jSliderPlayerMode.getValue()), Color.convertToEnum(jComboBoxPlayer1.getSelectedItem().toString()), Color.convertToEnum(jComboBoxPlayer2.getSelectedItem().toString()));
+        Game game_frame = null;
+    try {
+      game_frame = new Game(name, PlayerMode.fromOrdinal(jSliderPlayerMode.getValue()), Color.convertToEnum(jComboBoxPlayer1.getSelectedItem().toString()), Color.convertToEnum(jComboBoxPlayer2.getSelectedItem().toString()));
+    } catch (ClassNotFoundException ex) {
+      Logger.getLogger(GameSettings.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (NoSuchMethodException ex) {
+      Logger.getLogger(GameSettings.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (InstantiationException ex) {
+      Logger.getLogger(GameSettings.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (IllegalAccessException ex) {
+      Logger.getLogger(GameSettings.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (IllegalArgumentException ex) {
+      Logger.getLogger(GameSettings.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (InvocationTargetException ex) {
+      Logger.getLogger(GameSettings.class.getName()).log(Level.SEVERE, null, ex);
+    }
         //game_frame.setBounds(this.getBounds());
         game_frame.setLocationRelativeTo(null); // center the position of this jFrame
         game_frame.setVisible(true);
@@ -421,7 +459,7 @@ public class GameSettings extends javax.swing.JFrame {
   private javax.swing.JLabel jLabel3;
   private javax.swing.JLabel jLabel4;
   private javax.swing.JLabel jLabel5;
-  private javax.swing.JLabel jLabel6;
+  private javax.swing.JLabel jLabelPlayer2;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
   private javax.swing.JSeparator jSeparator1;

@@ -31,13 +31,20 @@ public class ActionJListHome extends MouseAdapter{
    if(e.getClickCount() == 1){ // you can comment this line and it also will be work 
      int index = list.locationToIndex(e.getPoint());
      ListModel dlm = list.getModel();
-     Object item = dlm.getElementAt(index);
-     list.ensureIndexIsVisible(index);
-//     System.out.println("Single click on item " + item);
-     home.setVisible(false);
-     GameSettings game_settings_frame = new GameSettings(item.toString());
-     game_settings_frame.setBounds(home.getBounds());
-     game_settings_frame.setVisible(true);
+     try
+     {
+       Object item = dlm.getElementAt(index);
+        list.ensureIndexIsVisible(index);
+   //     System.out.println("Single click on item " + item);
+        home.setVisible(false);
+        GameSettings game_settings_frame = new GameSettings(item.toString());
+        game_settings_frame.setBounds(home.getBounds());
+        game_settings_frame.setVisible(true);
+     }
+     catch(Exception exept)
+     {
+       
+     }
    }
   }
 }

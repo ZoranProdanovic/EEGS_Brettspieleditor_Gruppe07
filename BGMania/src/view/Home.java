@@ -11,12 +11,10 @@ import classes.Cell;
 import classes.Computer;
 import classes.Dice;
 import classes.Game;
-import classes.Ladders;
 import classes.Piece;
 import classes.Player;
-import classes.SingleDicingFigure;
+//import classes.SingleDicingFigure;
 import classes.Player1;
-import classes.Snake;
 import classes.SpecialField;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,11 +58,6 @@ public class Home extends javax.swing.JFrame {
     jLabel1.setText("BG Mania");
 
     jListGames.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-    jListGames.setModel(new javax.swing.AbstractListModel() {
-      String[] strings = { "Snake and Ladders", "Chess" };
-      public int getSize() { return strings.length; }
-      public Object getElementAt(int i) { return strings[i]; }
-    });
     jScrollPane1.setViewportView(jListGames);
     jListGames.addMouseListener(new events.ActionJListHome(jListGames, this));
 
