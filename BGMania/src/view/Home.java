@@ -6,19 +6,14 @@
 
 package view;
 
-import classes.Board;
-import classes.Cell;
-import classes.Computer;
-import classes.Dice;
-import classes.Game;
-import classes.Piece;
-import classes.Player;
 //import classes.SingleDicingFigure;
-import classes.Player1;
-import classes.SpecialField;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.List;
-import events.ActionJListHome;
 
 /**
  *
@@ -31,8 +26,49 @@ public class Home extends javax.swing.JFrame {
    */
   public Home() {
     initComponents();
+    jListGames.setModel(initModel());
     this.setLocationRelativeTo(null); // center the position of this jFrame
   }
+  
+  private MyListModel initModel(){
+     ArrayList<String> elements = new ArrayList<String>();
+
+     try{
+         FileInputStream in = new FileInputStream(System.getProperty("user.dir") + 
+            File.separator + "src" + File.separator + "view" + File.separator +
+            "LoadedGames.txt");
+   
+    BufferedReader reader;
+    String line;
+
+    reader = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
+    while ((line = reader.readLine()) != null) {
+        elements.add(line.substring(0,line.length()-1));
+    }
+    reader.close();
+    reader = null;
+
+     }catch(IOException ioe){
+         ioe.printStackTrace();
+     }
+     return new MyListModel(elements);
+  }
+  
+  public class MyListModel extends javax.swing.AbstractListModel{
+      ArrayList<String> strings = new ArrayList<String>();
+      public MyListModel(ArrayList<String> elements){strings = elements;};
+      public void setStrings(ArrayList<String> nstring){strings = nstring;}
+      public ArrayList<String> getStrings(){return strings;}
+      public void addElement(String elem){strings.add(elem);}
+      public int getSize() { return strings.size(); }
+      public Object getElementAt(int i) { return strings.get(i); }
+  };
+  
+  public void addElementToList(String elem){
+    ((MyListModel) jListGames.getModel()).addElement(elem);
+    //jListGames.notify();
+  }
+  
 
   /**
    * This method is called from within the constructor to initialize the form.
@@ -163,4 +199,5 @@ public class Home extends javax.swing.JFrame {
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JSeparator jSeparator1;
   // End of variables declaration//GEN-END:variables
+
 }
