@@ -54,6 +54,7 @@ public class Game extends javax.swing.JFrame {
     initComponents();
     setLayout(null);
     
+    String selected_game_name;
     String imagepath;
     String classname;
     String setround;
@@ -62,7 +63,7 @@ public class Game extends javax.swing.JFrame {
     int boardsize_y;
     
     this.game_name = game_name;
-    jLabelGameName.setText(game_name);
+//    jLabelGameName.setText(game_name);
     Board board = null;
 //    jTextFieldTimer.setText("00:00:00");
 //    jTextFieldRoundNumber.setText("0");
@@ -77,12 +78,14 @@ public class Game extends javax.swing.JFrame {
         Node nNode = nList.item(0);
         Element eElement = (Element) nNode;
         
-//        System.out.println("name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
+//        System.out.println("name : " + );
+        selected_game_name = eElement.getElementsByTagName("name").item(0).getTextContent().toString();
         imagepath = eElement.getElementsByTagName("imagepath").item(0).getTextContent().toString();
         classname = eElement.getElementsByTagName("classname").item(0).getTextContent().toString();
         setround = eElement.getElementsByTagName("setround").item(0).getTextContent().toString();
         settimer = eElement.getElementsByTagName("settimer").item(0).getTextContent().toString();
         
+        jLabelGameName.setText(selected_game_name);
         jTextFieldTimer.setText(settimer);
         jTextFieldRoundNumber.setText(setround);
         
