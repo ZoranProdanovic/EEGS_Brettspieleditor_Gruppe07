@@ -293,7 +293,12 @@ public class GameSettings extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonPlayActionPerformed
 
     private void jButtonInstructionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstructionActionPerformed
-        JOptionPane.showMessageDialog(this,"Snake and Ladders ...", "Instrution", JOptionPane.INFORMATION_MESSAGE);
+      JOptionPane.showMessageDialog(this,"Snake and Ladders \n\n"
+             + "The game is played as the actual boardgame; stepping on a snakehead"
+             + " will slide you down to its tail, \non the other hand "
+             + "stepping onto a ladder will let you climb up (only up) to the field it points "
+             + "to. \nGenerally, the goal of the game is to get to the final field, whereas "
+             + "you have to EXACTLY throw the \nnumber needed to step onto the last field.", "Instruction", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButtonInstructionActionPerformed
 
   private void jComboBoxPlayer1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxPlayer1ActionPerformed
